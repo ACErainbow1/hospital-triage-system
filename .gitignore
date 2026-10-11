@@ -1,0 +1,13 @@
+# 编译出来的文件
+build/
+*.o
+*.exe
+
+# 编辑器生成的
+.vscode/
+.idea/
+*.user
+
+# 系统文件
+Thumbs.db
+desktop.ini
