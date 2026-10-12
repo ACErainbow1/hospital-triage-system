@@ -1,4 +1,4 @@
-/* ==========================================================
+﻿/* ==========================================================
    data.cpp  --  读取数据文件、各种查找、日期计算
    作者：张健维   24070213
    ========================================================== */
@@ -184,9 +184,27 @@ void initToday()
    三、读各个数据文件
    ========================================================== */
 
+/* 打开 data 目录下的一个文件。
+   正常情况下程序是从项目根目录运行的，路径就是 data/xxx.txt；
+   但如果有人直接双击 build 文件夹里的 exe，当前目录会变成 build/，
+   这时再试一次 ../data/xxx.txt，程序照样能跑起来。*/
+FILE* openData(const char* name)
+{
+    char path[80];
+    FILE* fp;
+
+    sprintf(path, "data/%s", name);
+    fp = fopen(path, "r");
+    if (fp == NULL) {
+        sprintf(path, "../data/%s", name);
+        fp = fopen(path, "r");
+    }
+    return fp;
+}
+
 int loadDept()
 {
-    FILE* fp = fopen("data/department.txt", "r");
+    FILE* fp = openData("department.txt");
     if (fp == NULL) { printf("打不开 data/department.txt\n"); return 0; }
     char buf[LINE_LEN], f[MAXF][FLEN];
     while (readLine(fp, buf) && deptNum < MAX_DEPT)
@@ -207,7 +225,7 @@ int loadDept()
 
 int loadDoctor()
 {
-    FILE* fp = fopen("data/doctor.txt", "r");
+    FILE* fp = openData("doctor.txt");
     if (fp == NULL) { printf("打不开 data/doctor.txt\n"); return 0; }
     char buf[LINE_LEN], f[MAXF][FLEN];
     while (readLine(fp, buf) && doctorNum < MAX_DOCTOR)
@@ -230,7 +248,7 @@ int loadDoctor()
 
 int loadSchedule()
 {
-    FILE* fp = fopen("data/schedule.txt", "r");
+    FILE* fp = openData("schedule.txt");
     if (fp == NULL) { printf("打不开 data/schedule.txt\n"); return 0; }
     char buf[LINE_LEN], f[MAXF][FLEN];
     while (readLine(fp, buf) && scheduleNum < MAX_SCHEDULE)
@@ -252,7 +270,7 @@ int loadSchedule()
 
 int loadPatient()
 {
-    FILE* fp = fopen("data/patient.txt", "r");
+    FILE* fp = openData("patient.txt");
     if (fp == NULL) { printf("打不开 data/patient.txt\n"); return 0; }
     char buf[LINE_LEN], f[MAXF][FLEN];
     while (readLine(fp, buf) && patientNum < MAX_PATIENT)
@@ -274,7 +292,7 @@ int loadPatient()
 /* 预约文件里只写了排班编号，医生编号是通过排班推出来的 */
 int loadAppointment()
 {
-    FILE* fp = fopen("data/appointment.txt", "r");
+    FILE* fp = openData("appointment.txt");
     if (fp == NULL) { printf("打不开 data/appointment.txt\n"); return 0; }
     char buf[LINE_LEN], f[MAXF][FLEN];
     while (readLine(fp, buf) && apptNum < MAX_APPOINT)
@@ -298,7 +316,7 @@ int loadAppointment()
 
 int loadEvaluation()
 {
-    FILE* fp = fopen("data/evaluation.txt", "r");
+    FILE* fp = openData("evaluation.txt");
     if (fp == NULL) return 1;           /* 评价文件可以没有 */
     char buf[LINE_LEN], f[MAXF][FLEN];
     while (readLine(fp, buf) && evalNum < MAX_EVAL)
@@ -320,7 +338,7 @@ int loadEvaluation()
    同一个症状会出现好几行（对应不同科室） */
 int loadSymptom()
 {
-    FILE* fp = fopen("data/symptom.txt", "r");
+    FILE* fp = openData("symptom.txt");
     if (fp == NULL) { printf("打不开 data/symptom.txt\n"); return 0; }
     char buf[LINE_LEN], f[MAXF][FLEN];
     while (readLine(fp, buf) && symptomNum < MAX_SYMPTOM)
@@ -339,7 +357,7 @@ int loadSymptom()
 /* 平面图：一行是一个节点(N)或一条边(L)，用邻接矩阵存 */
 int loadMap()
 {
-    FILE* fp = fopen("data/map.txt", "r");
+    FILE* fp = openData("map.txt");
     if (fp == NULL) { printf("打不开 data/map.txt\n"); return 0; }
     char buf[LINE_LEN], f[MAXF][FLEN];
 
